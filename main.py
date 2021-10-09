@@ -7,14 +7,18 @@ with open("fstab.yml", "r") as stream:
         print(exc)
 
 entries = []
+output = ""
 
 def parse_yaml():
+    '''
+    This function iterates over imported yaml and creates a list containing each fstab entry.
+    '''
     for k, v in fstab.items():
         for i in fstab[k].items():
             entries.append(i)
 
     for i in entries:
-        print(i)
+        print(i[0], i[1])
 
 
 
