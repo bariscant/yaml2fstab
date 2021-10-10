@@ -1,5 +1,6 @@
 import yaml
 import os
+import sys
 
 with open("fstab.yml", "r") as stream:
     try:
@@ -35,10 +36,15 @@ def write_fstab_file():
             f.write(i[1]['mount'])
             f.write('\t')
             f.write(i[1]['type'])
+            options = str(i[1]['options']).split(',')
+            f.writelines(options)
+            for option in i[1]['options']:
+                f.write(option)
+                f.write(',')
             f.write('\t')
             f.write('defaults')
             f.write('\t')
-            f.write('0 0')
+            f.write('0\t0')
             f.write('\n')
         else:
             f.write(i[0])
@@ -49,7 +55,7 @@ def write_fstab_file():
             f.write('\t')
             f.write('defaults')
             f.write('\t')
-            f.write('0 0')
+            f.write('0\t0')
             f.write('\n')
     
     f.close()
