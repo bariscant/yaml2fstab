@@ -1,0 +1,1 @@
+This script tries to parse a yaml file containing variety of fstab configs and provide an fstab file.

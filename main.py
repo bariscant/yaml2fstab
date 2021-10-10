@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 import yaml
 import os
 import sys
 
-with open("fstab.yml", "r") as stream:
+with open(sys.argv[1], "r") as stream:
     try:
         fstab = yaml.safe_load(stream)
     except yaml.YAMLError as exc:
@@ -24,7 +25,7 @@ def parse_yaml():
 def write_fstab_file():
     f = open('fstab', 'w')
     original = ""
-    origin = open('/etc/fstab', 'r')
+    origin = open(sys.argv[2], 'r')
     f.writelines(origin.readlines())
     
     for i in entries:
@@ -36,13 +37,10 @@ def write_fstab_file():
             f.write(i[1]['mount'])
             f.write('\t')
             f.write(i[1]['type'])
-            options = str(i[1]['options']).split(',')
-            f.writelines(options)
-            for option in i[1]['options']:
-                f.write(option)
-                f.write(',')
-            f.write('\t')
-            f.write('defaults')
+            if 'options' in i[1]:
+                f.writelines(",".join(i[1]['options']))
+            else:
+                f.write('defaults')
             f.write('\t')
             f.write('0\t0')
             f.write('\n')
@@ -53,7 +51,10 @@ def write_fstab_file():
             f.write('\t')
             f.write(i[1]['type'])
             f.write('\t')
-            f.write('defaults')
+            if 'options' in i[1]:
+                f.writelines(",".join(i[1]['options']))
+            else:
+                f.write('defaults')
             f.write('\t')
             f.write('0\t0')
             f.write('\n')
@@ -65,6 +66,7 @@ def write_fstab_file():
 def main():
     parse_yaml()
     write_fstab_file()
+    print(entries)
 
 if __name__ == "__main__":
     main()
